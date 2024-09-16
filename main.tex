@@ -1,0 +1,132 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\title{Graph Theory w/ Linear Algebra}
+\author{Rodolfo Lopez }
+\date{May 2022}
+
+\begin{document}
+
+\maketitle 
+
+\section{Introduction}
+Graph Theory is the study of graphs consisting of vertices and edges. To learn more about the properties of graphs, we can use linear algebra, particularly, eigenvalues and eigenvectors. That is, given the spectrum of a graph, how could we use the trace to determine the total \# of vertices and $k$ walks of that graph? 
+
+\section{Graph}
+We can define a graph $G$ such that it is an ordered pair $G = (V,E)$, where $V$ is the set of vertices and $E$ is the set of edges, consisting of 2-element subsets of $V$. 
+
+\section{Adjacency Matrix}
+We can define an adjacency matrix $A_{ij}$, as a representation for $G$, such that \\
+
+$$
+A_{ij} =
+\left\{
+    \begin{array}{lr}
+        1, & \text{if } i \sim j\\
+        0, & \text{if } i \not\sim j
+    \end{array}
+\right\} 
+$$
+
+where $i \sim j$ means that $v_i$ is adjacent to $v_j$, and $i \not\sim j$ means that $v_i$ is not adjacent to $v_j$ for $v_i, v_j \in V$.
+
+\section{Spectrum}
+We can define the spectrum of $G$, denoted $spec(G)$, to be the set of eigenvalues $\lambda_1 \leq \lambda_2 \leq \ldots \leq \lambda_n$ corresponding to the adjacency matrix $A_{ij}$. 
+
+\section{Trace}
+We can define the trace of $A$, denoted $tr(A)$, as the sum of the diagonal entries of the adjacency matrix $A$. \\
+
+Now, we wish to show that $tr(A) = \sum^{n}_{i=1} \lambda_i$, where $\lambda_1, \ldots, \lambda_n$ are the eigenvalues for $A$ counted with multiplicity. \\
+
+\underline{Proof}
+
+Let $\vec{x_1}, \vec{x_2}, \ldots, \vec{x_n}$ be the set of eigenvectors corresponding to the spectrum of $G$ with $n$ vertices. \\
+
+Now suppose $X = (\vec{x_1}, \vec{x_2}, \ldots, \vec{x_n})$. Then,
+
+\[
+X^TAX = X^T[A\vec{x_1} \ldots A\vec{x_n}] = X^T[\lambda_1\vec{x_1} \ldots \lambda_n\vec{x_n}]
+= 
+\begin{bmatrix}
+\lambda_1 & 0 &\ldots & 0\\
+0 & \lambda_2 & \ddots  & \vdots\\
+\vdots  &\ddots  & \ddots & 0\\ 
+0 &\ldots & 0 & \lambda_n
+\end{bmatrix}
+\]
+
+(1) and (2) apply linear transformation from right to left, and $X = (\vec{x_1}, \vec{x_2}, \ldots, \vec{x_n})$ is the matrix of eigenvectors of $A$. \\
+(3) Since each resultant eigenvector in the matrix $AX$ will simply be scaled by its corresponding eigenvalue $\lambda_i$. \\
+(4) Since $X^T(AX) = $
+\[
+\begin{bmatrix}
+\vec{x_1} & \ldots \\
+\vec{x_2} & \ldots\\
+\vdots  & \\ 
+\vec{x_n} & \ldots
+\end{bmatrix}
+\begin{bmatrix}
+\lambda_1\vec{x_1} & \ldots & \lambda_n\vec{x_n} \\
+\vdots & \vdots & \vdots \\
+\end{bmatrix}
+\]
+
+(4a) $\vec{x_1}(\lambda_1\vec{x_1}) = \lambda_1(\vec{x_1}\vec{x_1}) = \lambda_1(|\vec{x_1}|)^2 = \lambda_1(1) = \lambda_1$, because eigenvectors have a magnitude of 1, the diagonal entries become the corresponding eigenvalues. \\
+
+(4b) $\vec{x_2}(\lambda_1\vec{x_1}) = \lambda_1(\vec{x_2}\vec{x_1}) = \lambda_1(0) = 0$, because two different eigenvectors for the same matrix are orthogonal, their dot product is 0, so the non-diagonal entries are all 0. \\
+
+Lastly, by commutativity, $tr(X^TAX) = tr(X^TXA) = tr(IA) = tr(A)$. \\
+
+So, by the definition of trace, if we add up all of the diagonal entries in $A$, then, we finally have that $tr(A) = \sum^n_{i=1} \lambda_i$, where $\lambda_1, \ldots, \lambda_n$ are the eigenvalues for the adjacency matrix $A$ counted with multiplicity.
+
+\section{Trace of Adjacency Matrix Squared}
+Consider $tr(A^2)$. \\
+
+Then, $A\vec{x} = \lambda\vec{x}$ implies that \\
+
+$A^2\vec{x} = A(A\vec{x}) = A(\lambda\vec{x}) = \lambda(\lambda)\vec{x} = \lambda^2\vec{x}$. \\
+
+So, $tr(A^2) = \sum^n_{i=1} \lambda^2_i = \lambda^2_1 + \ldots + \lambda^2_n = $ \# of walks with 2 edges starting/ending at $i$. \\
+
+In other words, $tr(A^2)$ is equal to twice the \# of edges. 
+
+\section{Trace of Adjacency Matrix of Higher Powers}
+Now, consider $tr(A^k)$, for an arbitrary power of $k$. \\
+
+Recall: $A_{ij}$ = \# of walks with $k$ edges starting at $i$ and ending at $j$. \\
+
+Similarly to $tr(A^2)$, we have that, \\
+
+$tr(A^k) = \sum^n_{i=1} \lambda^k_i = $ \# of walks with $k$ edges starting/ending at $i$
+
+\section{Example}
+Given $spec(G) = (4,-1,-1,-1,-1)$, determine $G$ and determine how many closed walks there are with 3 edges. \\
+
+We are given 5 eigenvalues in $spec(G)$, so this implies that the total \# of vertices in $G = 5$. \\
+
+Recall: $tr(A) = \lambda_1 + \lambda_2 + \lambda_3 + \lambda_4 + \lambda_5  = 4 + (-1) + (-1) + (-1) + (-1) = 0$. \\
+
+The main diagonal is always 0 (at least for simple graphs) since $v_i \in V$ can never be adjacent to itself. Thus, adding 0 repeatedly is always 0, so the trace of any adjacency matrix $A$, $tr(A)$, for a simple graph $G$ must be equal to 0. \\
+
+In order to determine $G$, it may be helpful to know the total \# of edges in $G$. \\
+
+We have, \\
+
+$tr(A^2) = \lambda^2_1 + \lambda^2_2 + \lambda^2_3 + \lambda^2_4 + \lambda^2_5  = (4)^2 + (-1)^2 + (-1)^2 + (-1)^2 + (-1)^2 = 20$. \\
+
+So, the total \# of edges in $G = tr(A^2) / 2 = 20 / 2 = 10$. \\
+
+If $G$ has 5 total vertices and 10 total edges, then we can conclude $G = K_5$. \\
+
+In order to determine the total \# of triangles or closed walks with 3 edges in $K_5$, consider the power $k = 3$. \\
+
+We have, \\
+
+$tr(A^k) = tr(A^3) = \lambda^3_1 + \lambda^3_2 + \lambda^3_3 + \lambda^3_4 + \lambda^3_5 = (4)^3 + (-1)^3 + (-1)^3 + (-1)^3 + (-1)^3 = 60$. \\
+
+However, each vertex is counted twice, and there are three vertices in a triangle. In other words, $tr(A^3)$ is equal to six times the total \# of edges. \\
+
+So, the total \# of triangles or closed walks with 3 edges in $K_5 = tr(A^3) / 6 = 60/6 = 10$. 
+
+\end{document}
